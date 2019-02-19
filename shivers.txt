@@ -1,0 +1,80 @@
+Eagle Head + 688 = ixupi number
+Room number is EDI = 0000000D, 4*EDI + 2 = (int)54, readInteger(PotMemoryAddress+54)
+
+200 water bottom
+201 wax bottom
+202 ash bottom
+203 oil bottom
+204 cloth bottom
+205 wood bottom
+206 crystal bottom
+207 electricity bottom
+208 earth/sand bottom
+209 metal bottom
+
+210 water top
+211 wax top
+212 ash top
+213 oil top
+214 cloth top
+215 wood top
+216 crystal top
+217 electricity top
+218 earth/sand top
+219 metal top
+
+220 water completed
+221 wax completed
+222 ash completed
+223 oil completed
+224 cloth completed
+225 wood completed
+226 crystal completed
+227 electricity completed
+228 earth/sand completed
+229 metal completed
+
+910 main menu
+922 name select
+6220 Desk Drawer
+7111 Drawer puzzle
+8490 library pot
+9760 Bird Head
+12181 Ocean room pot
+14080 river pot
+16420 theater
+20553 egyption coffin pot
+21070 chinese solitair
+23550 lyre pot
+24320 Skeleton Coffin
+25010 Janitor Closet
+29080 UFO
+30420 Alchemy Machine
+31310 Puzzle Room
+32570 Hanging
+35110 clock tower
+
+
+Desk Drawer: EDI = 00000077
+Drawers Puzzle: EDI = 00000079
+Library: EDI = 0000007D
+Eagle Head: EDI = 00000081
+Ocean: EDI = 00000085
+Tar River: EDI = 00000087
+Theater: EDI = 00000089
+Plant Room: EDI = 0000008B
+Egypt: EDI = 00000089
+Chinese Checkers: EDI = 0000008F
+Lyre: EDI = 00000093
+Skeleton: EDI = 00000095
+Anansi: EDI = 00000097
+Janitor Closet: EDI = 00000099
+UFO: EDI = 0000009B
+Alchemy: EDI = 0000009D
+Puzzle Room: EDI = 0000009F
+Hanging: EDI = 000000A1
+Clock Tower: EDI = 000000A3
+Library Cupboard: EDI = 0000007B
+Eagle Nest: EDI = 00000083
+Tiki Hut: EDI = 00000091
+Electricity Top Tunnel: EDI = 0000007F

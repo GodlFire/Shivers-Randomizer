@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="27">
+  <Files>
+    <TestScript.LUA Encoding="Ascii85">/7Z%CC?9LzE74FYNi8l;)(Xg:00</TestScript.LUA>
+  </Files>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"AOBInjection"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+
+aobscanmodule(INJECT,scummvm.exe,8B 7D B0 89 14 B8) // should be unique
+
+registersymbol(PotAddress)
+alloc(newmem,$30)
+alloc(PotAddress,$5)
+
+label(code)
+label(return)
+label(PotAddressCapture)
+
+newmem:
+
+code:
+  pushf
+  mov edi,[ebp-50]
+  mov [eax+edi*4],edx
+  cmp edi,00000079
+  je PotAddressCapture
+  popf
+  jmp return
+
+PotAddressCapture:
+popf
+mov [PotAddress],eax
+jmp return
+
+INJECT:
+  jmp newmem
+  nop
+return:
+registersymbol(INJECT)
+
+
+
+[DISABLE]
+
+INJECT:
+  db 8B 7D B0 89 14 B8
+
+unregistersymbol(INJECT)
+unregistersymbol(PotAddress)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECTION POINT: "scummvm.exe"+84DBE8
+
+"scummvm.exe"+84DBC3: E8 59 1B FC FF           -  call scummvm.exe+80F721
+"scummvm.exe"+84DBC8: 48                       -  dec eax
+"scummvm.exe"+84DBC9: 7F 4C                    -  jg scummvm.exe+84DC17
+"scummvm.exe"+84DBCB: EB EE                    -  jmp scummvm.exe+84DBBB
+"scummvm.exe"+84DBCD: 8D 4D 08                 -  lea ecx,[ebp+08]
+"scummvm.exe"+84DBD0: E8 93 26 00 00           -  call scummvm.exe+850268
+"scummvm.exe"+84DBD5: 66 3D FF 1F              -  cmp ax,1FFF
+"scummvm.exe"+84DBD9: 0F 84 DC 00 00 00        -  je scummvm.exe+84DCBB
+"scummvm.exe"+84DBDF: 8B 87 88 00 00 00        -  mov eax,[edi+00000088]
+"scummvm.exe"+84DBE5: 8B 55 08                 -  mov edx,[ebp+08]
+// ---------- INJECTING HERE ----------
+"scummvm.exe"+84DBE8: 8B 7D B0                 -  mov edi,[ebp-50]
+"scummvm.exe"+84DBEB: 89 14 B8                 -  mov [eax+edi*4],edx
+// ---------- DONE INJECTING  ----------
+"scummvm.exe"+84DBEE: A1 44 E4 B3 01           -  mov eax,[scummvm.exe+17AE444]
+"scummvm.exe"+84DBF3: 8B 88 C0 00 00 00        -  mov ecx,[eax+000000C0]
+"scummvm.exe"+84DBF9: 8B 45 08                 -  mov eax,[ebp+08]
+"scummvm.exe"+84DBFC: 89 7C 24 04              -  mov [esp+04],edi
+"scummvm.exe"+84DC00: 89 44 24 08              -  mov [esp+08],eax
+"scummvm.exe"+84DC04: 8B 45 B4                 -  mov eax,[ebp-4C]
+"scummvm.exe"+84DC07: 89 04 24                 -  mov [esp],eax
+"scummvm.exe"+84DC0A: E8 BB 41 FD FF           -  call scummvm.exe+821DCA
+"scummvm.exe"+84DC0F: 83 EC 0C                 -  sub esp,0C
+"scummvm.exe"+84DC12: E9 B9 00 00 00           -  jmp scummvm.exe+84DCD0
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>5</ID>
+      <Description>"PotAddress"</Description>
+      <VariableType>Array of byte</VariableType>
+      <ByteLength>4</ByteLength>
+      <Address>PotAddress</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <Comments>Eagle Head + 688 = ixupi number
+Room number is EDI = 0000000D, 4*EDI + 2 = (int)54, readInteger(PotMemoryAddress+54)
+200 water bottom
+201 wax bottom
+202 ash bottom
+203 oil bottom
+204 cloth bottom
+205 wood bottom
+206 crystal bottom
+207 electricity bottom
+208 earth/sand bottom
+209 metal bottom
+210 water top
+211 wax top
+212 ash top
+213 oil top
+214 cloth top
+215 wood top
+216 crystal top
+217 electricity top
+218 earth/sand top
+219 metal top
+220 water completed
+221 wax completed
+222 ash completed
+223 oil completed
+224 cloth completed
+225 wood completed
+226 crystal completed
+227 electricity completed
+228 earth/sand completed
+229 metal completed
+1 Desk Drawer: EDI = 0x00000077, 4*EDI + 2 = (int)478
+2 Drawers Puzzle: EDI = 0x00000079, 4*EDI + 2 = (int)486
+3 Library: EDI = 0x0000007D, 4*EDI + 2 = (int)502
+4 Eagle Head: EDI = 0x00000081, 4*EDI + 2 = (int)518
+5 Ocean: EDI = 0x00000085, 4*EDI + 2 = (int)534
+6 Tar River: EDI = 0x00000087, 4*EDI + 2 = (int)542
+7 Theater: EDI = 0x00000089, 4*EDI + 2 = (int)550
+8 Plant Room: EDI = 0x0000008B, 4*EDI + 2 = (int)558
+9 Egypt: EDI = 0x0000008D, 4*EDI + 2 = (int)566
+10 Chinese Checkers: EDI = 0x0000008F, 4*EDI + 2 = (int)574
+11 Lyre: EDI = 0x00000093, 4*EDI + 2 = (int)590
+12 Skeleton: EDI = 0x00000095, 4*EDI + 2 = (int)598
+13 Anansi: EDI = 0x00000097, 4*EDI + 2 = (int)606
+14 Janitor Closet: EDI = 0x00000099, 4*EDI + 2 = (int)614
+15 UFO: EDI = 0x0000009B, 4*EDI + 2 = (int)622
+16 Alchemy: EDI = 0x0000009D, 4*EDI + 2 = (int)630
+17 Puzzle Room: EDI = 0x0000009F, 4*EDI + 2 = (int)638
+18 Hanging: EDI = 0x000000A1, 4*EDI + 2 = (int)646
+19 Clock Tower: EDI = 0x000000A3, 4*EDI + 2 = (int)654
+20 Electricity Top Tunnel: EDI = 0x0000007F, 4*EDI + 2 = (int)510
+20 Library Cupboard: EDI = 0x0000007B, 4*EDI + 2 = (int)494
+21 Eagle Nest: EDI = 0x00000083, 4*EDI + 2 = (int)526
+23 Tiki Hut: EDI = 0x00000091, 4*EDI + 2 = (int)582
+</Comments>
+  <LuaScript>--Initilization
+NumberOfScrambles = 0
+IncludeExtraLocations = 0
+ExcludeLyre = 0
+
+
+
+---Scramble Logic---
+function btnScrambleClick()
+  Seed = 0
+
+  --Check if a seed was entered
+  if tonumber(txtboxSeed.Text) == nil then
+     Seed = os.time()
+     ScreenText = Seed
+     math.randomseed(Seed)
+  else
+     Seed = tonumber(txtboxSeed.Text)
+     ScreenText = Seed
+     ScreenText = ScreenText .. " Set Seed"
+     math.randomseed(Seed)
+  end
+
+
+
+
+  ::ScrambleScript::
+  Location = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  LocationSelected = 0
+  PieceSelected = 0
+  PiecePlacedCounter = 0
+  ScrambleComplete = false
+
+
+
+  while (ScrambleComplete == false) do
+
+        --Select a piece to try and place
+        ::SelectPiece::
+        PieceSelected = math.random(200,219)
+
+        --If piece has already been placed then pick again
+        for p = 1,23,1 do
+           if (Location[p] == PieceSelected) then
+              goto SelectPiece
+           end
+        end
+
+
+        --Select a location to try and fill
+        ::SelectLocation::
+        LocationSelected = math.random(1,20 + IncludeExtraLocations * 3)
+
+        --If Location is filled choose a new location, else place it
+        if(Location[LocationSelected] &gt; 0) then
+            goto SelectLocation
+        else
+            Location[LocationSelected] = PieceSelected
+            PiecePlacedCounter = PiecePlacedCounter + 1
+        end
+
+        --Check if Lyre is excluded and the location was rolled and extra locations included
+        if(ExcludeLyre == 1 and Location[11] &gt; 0 and IncludeExtraLocations ==1) then
+            goto ScrambleScript
+        end
+
+
+        --Check for impossible scramble (Tar River and Janitor Closet)
+        -- Oil bottom/top in tar river, Cloth bottom/top in Janitor Closet, Cloth Bottom/Top in tar river and Oil bottom/top in Janitor Closet
+        if(Location[6] == 203 or Location[6] == 213 or Location[14] == 204 or Location[14] == 214 or (Location[6] == 204 or Location[6] == 214) and (Location[14] == 203 or Location[14] == 203)) then
+            goto ScrambleScript
+        end
+
+        --Determine if scramble is complete
+        if(PiecePlacedCounter == 20) then
+            ScrambleComplete = true
+        end
+
+        --Grab PotPlacement Memory Address
+        PotMemoryAddress = (readBytes("PotAddress+3")*16*16*16*16*16*16 + readBytes("PotAddress+2")*16*16*16*16 + readBytes("PotAddress+1")*16*16 + readBytes("PotAddress+0"))
+
+        --Write Memory Addresses
+        --If piece has already been placed then pick again
+            writeBytes(PotMemoryAddress+478,Location[1])
+            writeBytes(PotMemoryAddress+486,Location[2])
+            writeBytes(PotMemoryAddress+502,Location[3])
+            writeBytes(PotMemoryAddress+518,Location[4])
+            writeBytes(PotMemoryAddress+534,Location[5])
+            writeBytes(PotMemoryAddress+542,Location[6])
+            writeBytes(PotMemoryAddress+550,Location[7])
+            writeBytes(PotMemoryAddress+558,Location[8])
+            writeBytes(PotMemoryAddress+566,Location[9])
+            writeBytes(PotMemoryAddress+574,Location[10])
+            writeBytes(PotMemoryAddress+590,Location[11])
+            writeBytes(PotMemoryAddress+598,Location[12])
+            writeBytes(PotMemoryAddress+606,Location[13])
+            writeBytes(PotMemoryAddress+614,Location[14])
+            writeBytes(PotMemoryAddress+622,Location[15])
+            writeBytes(PotMemoryAddress+630,Location[16])
+            writeBytes(PotMemoryAddress+638,Location[17])
+            writeBytes(PotMemoryAddress+646,Location[18])
+            writeBytes(PotMemoryAddress+654,Location[19])
+            writeBytes(PotMemoryAddress+510,Location[20])
+            writeBytes(PotMemoryAddress+494,Location[21])
+            writeBytes(PotMemoryAddress+526,Location[22])
+            writeBytes(PotMemoryAddress+582,Location[23])
+
+
+            --Set Beth Flag
+            writeBytes(PotMemoryAddress+859,128)
+
+
+
+  end
+  --for p = 1,23,1 do
+    --  print(Location[p])
+  --end
+
+  --Update Form
+  NumberOfScrambles = NumberOfScrambles + 1
+
+  --If settings were used write that to the screen for verification
+  if(IncludeExtraLocations == 1) then
+     if(ExcludeLyre == 1) then
+        ScreenText = ScreenText .. " EL"
+     else
+         ScreenText = ScreenText .. " E"
+     end
+  end
+
+  setMessage(0,0,ScreenText, 0x00ff00, 0x000000)
+
+  --lblAddress.Caption = PotMemoryAddress
+  lblScrambleNumber2.Caption = NumberOfScrambles
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+--Functions for form controls below
+
+function btnHelpClick()
+  showMessage("Welcome to Shivers Randomizer 1.3.1\n\nHow to use:\n1. Launch Shivers\n2. Attach process to shivers\n3. Press New Game (In Shivers)\n4. Change Settings as desired\n5. Press scramble\n\n If you load a game or restart shivers the randomizer must also be restarted.")
+end
+
+--Attach to Shivers
+function btnAttachClick()
+  f = createForm()
+  control_setSize(f, 400,400)
+  control_setCaption(f, "Process List")
+  setProperty(f , "BiDiMode", "bdLeftToRight")
+
+  list = createListBox(f)
+  x,y = control_getSize(f)
+  control_setSize(list, x-10, y-30)
+  control_setPosition(list, 5,5)
+
+  button1 = createButton(f)
+  button2 = createButton(f)
+  button3 = createButton(f)
+  control_setSize(button1, 80, 20)
+  control_setSize(button2, 80, 20)
+  control_setSize(button3, 80, 20)
+  control_setCaption(button1, "Get Processes")
+  control_setCaption(button2, "Clear")
+  control_setCaption(button3, "Attach")
+
+  control_setPosition(button1, 50,y-22)
+  control_setPosition(button2, 150,y-22)
+  control_setPosition(button3, 250,y-22)
+
+  Items = listbox_getItems(list)
+
+  TempTable = {}
+  function GetTheProcessList()
+     local SL=createStringlist()
+     getWindowlist(SL)
+     for i=0,strings_getCount(SL)-1 do
+        local entry = strings_getString(SL,i)
+        local processname = entry:sub(10,255)
+        local PID = tonumber('0x'..entry:sub(1,8))
+       TempTable[i] = {PID, processname}
+    end
+    return TempTable
+  end
+
+  function AddTheProcessList()
+     GetTheProcessList()
+     index = 0
+     for y in pairs (TempTable) do
+        index = index+1
+     end
+     for i=0, index-1 do
+        if TempTable[i]~='' and TempTable[i]~= nil then
+           local TempText = "Process ID : "..TempTable[i][1].."   Process Name : "..TempTable[i][2]
+           strings_add(Items, TempText)
+        end
+     end
+  end
+  function GetAndAddProcess()
+     TempTable = {}
+     strings_clear(Items)
+     AddTheProcessList()
+  end
+
+  function Clear()
+     TempTable = {}
+     strings_clear(Items)
+  end
+
+  function AttachToTheSelectedProcess()
+     local ProcessID = listbox_getItemIndex(list)
+     if ProcessID~=-1 then
+        if TempTable[ProcessID][1]~=nil then
+           openProcess(TempTable[ProcessID][1])
+           lblAttachStatus2.Caption = "Shivers detected  :)"
+           getAddressList().getMemoryRecordByDescription("AOBInjection").Active=true
+           f.close()
+        else
+           lblAttachStatus2.Caption = "Shivers not detected  :("
+           return showMessage("Failed to open the select process")
+        end
+     else
+        lblAttachStatus2.Caption = "Shivers not detected  :("
+        return showMessage("Please choose a process from the list")
+     end
+  end
+
+  control_onClick(button1,GetAndAddProcess)
+  control_onClick(button2,Clear)
+  control_onClick(button3,AttachToTheSelectedProcess)
+end
+
+
+
+
+--If box checked then included extra locations in scramble logic (Eagles Nest, Library Cupboard, Tiki Hut)
+function cbExtraLocationsClick()
+  IncludeExtraLocations = -1 * IncludeExtraLocations + 1
+
+  --Disable Exclude Lyre setting if extra locations isnt set as there is no room
+  if(IncludeExtraLocations == 0) then
+     control_setEnabled(cbExcludeLyre, false)
+  else
+      control_setEnabled(cbExcludeLyre, true)
+  end
+end
+
+--If box checked then exclude lyre
+function cbExcludeLyreClick()
+  ExcludeLyre = -1 * ExcludeLyre + 1
+end
+
+
+--Used to write text to the screen for speed run verification
+function setMessage(x,y,message, textColor, backgroundColor)
+  if h==nil then
+    h=createD3DHook()
+  end
+
+  if p then
+    p.destroy()
+  end
+  p=createPicture()
+  c=p.PNG.Canvas
+  c.Brush.Color=backgroundColor
+  c.Font.Color=textColor
+  p.PNG.Width=math.max(1,c.getTextWidth(message))
+  p.PNG.Height=math.max(1,c.getTextHeight(message))
+  c.textOut(0,0,message)
+
+  if not pt then
+    pt=h.createTexture(p)
+  else
+    pt.loadTextureByPicture(p)
+  end
+
+  if not ps then
+    ps=h.createSprite(pt)
+  else
+    ps.Width=pt.Width
+    ps.Height=pt.Height
+  end
+
+  ps.x=x
+  ps.y=y
+
+  ps.Visible=message~=""
+end
+
+
+
+
+
+
+
+--Run Other Script
+dofile("FormBuilderScript.lua")
+
+</LuaScript>
+</CheatTable>
