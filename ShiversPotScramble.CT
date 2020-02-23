@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheatTable CheatEngineTableVersion="27">
+<CheatTable CheatEngineTableVersion="28">
   <Files>
     <TestScript.LUA Encoding="Ascii85">/7Z%CC?9LzE74FYNi8l;)(Xg:00</TestScript.LUA>
   </Files>
@@ -261,8 +261,7 @@ function btnScrambleClick()
             writeBytes(PotMemoryAddress+859,128)
 			
 			--Set Mailbox Flag
-			writeBytes(PotMemoryAddress+604,64)
-
+			writeBytes(PotMemoryAddress+847,84)
 
 
   end
