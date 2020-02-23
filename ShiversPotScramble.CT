@@ -259,9 +259,13 @@ function btnScrambleClick()
 
             --Set Beth Flag
             writeBytes(PotMemoryAddress+859,128)
+<<<<<<< HEAD
 			
 			--Set Mailbox Flag
 			writeBytes(PotMemoryAddress+847,84)
+=======
+
+>>>>>>> parent of 21a6c57... Update ShiversPotScramble.CT
 
 
   end
@@ -303,7 +307,7 @@ end
 --Functions for form controls below
 
 function btnHelpClick()
-  showMessage("Welcome to Shivers Randomizer 1.3.2\n\nHow to use:\n1. Launch Shivers\n2. Attach process to shivers\n3. Press New Game (In Shivers)\n4. Change Settings as desired\n5. Press scramble\n\n If you load a game or restart shivers the randomizer must also be restarted.")
+  showMessage("Welcome to Shivers Randomizer 1.3.1\n\nHow to use:\n1. Launch Shivers\n2. Attach process to shivers\n3. Press New Game (In Shivers)\n4. Change Settings as desired\n5. Press scramble\n\n If you load a game or restart shivers the randomizer must also be restarted.")
 end
 
 --Attach to Shivers
