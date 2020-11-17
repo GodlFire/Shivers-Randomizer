@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheatTable CheatEngineTableVersion="28">
+<CheatTable CheatEngineTableVersion="34">
   <Files>
     <TestScript.LUA Encoding="Ascii85">/7Z%CC?9LzE74FYNi8l;)(Xg:00</TestScript.LUA>
   </Files>
@@ -153,6 +153,9 @@ Room number is EDI = 0000000D, 4*EDI + 2 = (int)54, readInteger(PotMemoryAddress
 NumberOfScrambles = 0
 IncludeExtraLocations = 0
 ExcludeLyre = 0
+RaceMode = 0
+RedDoorOpen = 0
+FirstToFive = 0
 
 
 
@@ -163,6 +166,9 @@ function btnScrambleClick()
   --Check if a seed was entered
   if tonumber(txtboxSeed.Text) == nil then
      Seed = os.time()
+     math.randomseed(Seed)
+     --Generate a random number seeded with the system clock and set that as the new seeed)
+     Seed = math.random(1,2147483647)
      ScreenText = Seed
      math.randomseed(Seed)
   else
@@ -177,6 +183,12 @@ function btnScrambleClick()
 
   ::ScrambleScript::
   Location = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+  FirstToFiveList = {0,0,0,0,0,0,0,0,0,0}
+  FirstToFiveSetChoose = 0
+  FirstToFiveSetsPicked = {0,0,0,0,0}
+  FirstToFiveListFilled = false
+  FirstToFiveOilUsed = false
+  FirstToFiveClothUsed = false
   LocationSelected = 0
   PieceSelected = 0
   PiecePlacedCounter = 0
@@ -186,9 +198,83 @@ function btnScrambleClick()
 
   while (ScrambleComplete == false) do
 
-        --Select a piece to try and place
+        --[[
+        Select a piece to try and place
+        FirstToFive NOT selected then normal scramble
+        First to Five Mode, Select 5 sets not lightning
+        1 = Water
+        2 = Wax
+        3 = Ash
+        4 = Oil
+        5 = Cloth
+        6 = Wood
+        7 = Crystal
+        8 = Sand
+        9 = Metal
+        ]]--
         ::SelectPiece::
-        PieceSelected = math.random(200,219)
+        if((FirstToFive == 0 and RaceMode == 0) or (RaceMode == 1 and FirstToFive == 0) or (RaceMode == 0 and FirstToFive == 1)) then --Standard Scramble
+            PieceSelected = math.random(200,219)
+        else --First to Five Scramble
+            ::FirstToFiveListFill::
+            --Check if the First To Five List has been filled
+            if(FirstToFiveListFilled == false) then
+                --5 Iterations for 5 sets
+                for c = 1,5,1 do
+                  --Select a Set
+                  FirstToFiveSetChoose = math.random(1,9)
+                  --Check if the Set has already been selected, if it has start over
+                  for w = 1,5,1 do
+                      if(FirstToFiveSetsPicked[w] == FirstToFiveSetChoose) then
+                          goto FirstToFiveListFill
+                      end
+                  end
+
+                  --Set set picked to list for checking duplicates later
+                  FirstToFiveSetsPicked[c] = FirstToFiveSetChoose
+
+                  --If the piece has not already been selected then add the piece pair to the master list
+                  if(FirstToFiveSetChoose == 1) then --Water
+                     FirstToFiveList[2*c-1] = 200
+                     FirstToFiveList[2*c] = 210
+                  elseif(FirstToFiveSetChoose == 2) then --Wax
+                     FirstToFiveList[2*c-1] = 201
+                     FirstToFiveList[2*c] = 211
+                  elseif(FirstToFiveSetChoose == 3) then --Ash
+                     FirstToFiveList[2*c-1] = 202
+                     FirstToFiveList[2*c] = 212
+                  elseif(FirstToFiveSetChoose == 4) then --Oil
+                     FirstToFiveList[2*c-1] = 203
+                     FirstToFiveList[2*c] = 213
+                  elseif(FirstToFiveSetChoose == 5) then --Cloth
+                     FirstToFiveList[2*c-1] = 204
+                     FirstToFiveList[2*c] = 214
+                  elseif(FirstToFiveSetChoose == 6) then --Wood
+                     FirstToFiveList[2*c-1] = 205
+                     FirstToFiveList[2*c] = 215
+                  elseif(FirstToFiveSetChoose == 7) then --Crystal
+                     FirstToFiveList[2*c-1] = 206
+                     FirstToFiveList[2*c] = 216
+                  elseif(FirstToFiveSetChoose == 8) then --Sand
+                     FirstToFiveList[2*c-1] = 208
+                     FirstToFiveList[2*c] = 218
+                  else --Metal
+                     FirstToFiveList[2*c-1] = 209
+                     FirstToFiveList[2*c] = 219
+                  end
+                end
+
+                --Set FirstToFiveListFilled flag to true so we can skip selection process on next iteration of selecting a piece
+                FirstToFiveListFilled = true
+            end
+
+
+            --Select a piece from master list to fill into locations
+            PieceSelected = FirstToFiveList[math.random(1,10)]
+
+        end
+
+
 
         --If piece has already been placed then pick again
         for p = 1,23,1 do
@@ -211,7 +297,7 @@ function btnScrambleClick()
         end
 
         --Check if Lyre is excluded and the location was rolled and extra locations included
-        if(ExcludeLyre == 1 and Location[11] &gt; 0 and IncludeExtraLocations ==1) then
+        if(ExcludeLyre == 1 and Location[11] &gt; 0 and IncludeExtraLocations == 1) then
             goto ScrambleScript
         end
 
@@ -222,8 +308,27 @@ function btnScrambleClick()
             goto ScrambleScript
         end
 
+        --Check for impossible scrambles in First To Five (Ex: a piece located behind cloth when no cloth pot in game)
+        --Determine if oil or cloth was picked
+        for j = 1,5,1 do
+            if(FirstToFiveSetsPicked[j] == 4) then
+                FirstToFiveOilUsed = true
+            elseif (FirstToFiveSetsPicked[j] == 5) then
+                FirstToFiveClothUsed = true
+            end
+        end
+
+        if(FirstToFive == 1 and RaceMode == 1) then
+            if((FirstToFiveOilUsed == false and Location[6] &gt; 0) or (FirstToFiveClothUsed == false and Location[14] &gt; 0)) then
+               goto ScrambleScript
+            end
+        end
+
+
         --Determine if scramble is complete
-        if(PiecePlacedCounter == 20) then
+        if(PiecePlacedCounter == 10 and FirstToFive == 1 and RaceMode == 1) then --First To Five Mode
+            ScrambleComplete = true
+        elseif(PiecePlacedCounter == 20) then
             ScrambleComplete = true
         end
 
@@ -259,27 +364,45 @@ function btnScrambleClick()
 
             --Set Beth Flag
             writeBytes(PotMemoryAddress+859,128)
-			
-			--Set Mailbox Flag
-			writeBytes(PotMemoryAddress+847,84)
 
+	        --Set Mailbox Flag
+	        writeBytes(PotMemoryAddress+847,84)
+
+            --Set Red Door Flag is Race Mode
+            if(RaceMode == 1 and RedDoorOpen == 1) then
+            writeBytes(PotMemoryAddress+842,128)
+            end
 
   end
+
+
   --for p = 1,23,1 do
-    --  print(Location[p])
+  --    print(Location[p])
   --end
 
   --Update Form
   NumberOfScrambles = NumberOfScrambles + 1
 
   --If settings were used write that to the screen for verification
+  --First add a space
+  ScreenText = ScreenText .. " "
   if(IncludeExtraLocations == 1) then
      if(ExcludeLyre == 1) then
-        ScreenText = ScreenText .. " EL"
+        ScreenText = ScreenText .. "EL"
      else
-         ScreenText = ScreenText .. " E"
+         ScreenText = ScreenText .. "E"
      end
   end
+
+  if(FirstToFive == 1) then
+    ScreenText = ScreenText .. "F"
+  end
+
+  if(RedDoorOpen == 1) then
+    ScreenText = ScreenText .. "R"
+  end
+
+  ScreenText = ScreenText .. " V1.4.0 Intel"
 
   setMessage(0,0,ScreenText, 0x00ff00, 0x000000)
 
@@ -303,7 +426,7 @@ end
 --Functions for form controls below
 
 function btnHelpClick()
-  showMessage("Welcome to Shivers Randomizer 1.3.2\n\nHow to use:\n1. Launch Shivers\n2. Attach process to shivers\n3. Press New Game (In Shivers)\n4. Change Settings as desired\n5. Press scramble\n\n If you load a game or restart shivers the randomizer must also be restarted.")
+  showMessage("Welcome to Shivers Randomizer 1.4.0\n\nHow to use:\n1. Launch Shivers\n2. Attach process to shivers\n3. Press New Game (In Shivers)\n4. Change Settings as desired\n5. Press scramble\n\n If you load a game or restart shivers the randomizer must also be restarted.")
 end
 
 --Attach to Shivers
@@ -335,14 +458,19 @@ function btnAttachClick()
   Items = listbox_getItems(list)
 
   TempTable = {}
+
   function GetTheProcessList()
+     q = 0;
      local SL=createStringlist()
      getWindowlist(SL)
      for i=0,strings_getCount(SL)-1 do
         local entry = strings_getString(SL,i)
         local processname = entry:sub(10,255)
         local PID = tonumber('0x'..entry:sub(1,8))
-       TempTable[i] = {PID, processname}
+       if string.find(processname, "Shivers") ~= nil and string.find(processname, "Randomizer") == nil then
+         TempTable[q] = {PID, processname}
+         q = q + 1;
+       end
     end
     return TempTable
   end
@@ -405,13 +533,37 @@ function cbExtraLocationsClick()
   if(IncludeExtraLocations == 0) then
      control_setEnabled(cbExcludeLyre, false)
   else
-      control_setEnabled(cbExcludeLyre, true)
+  control_setEnabled(cbExcludeLyre, true)
   end
 end
 
 --If box checked then exclude lyre
 function cbExcludeLyreClick()
   ExcludeLyre = -1 * ExcludeLyre + 1
+end
+
+--If box checked then enable racemode. This includes red door open option as well as first to five setup
+function cbRaceModeClick()
+  RaceMode = -1 * RaceMode + 1
+
+  --Disable Red Door option and First to Five Setup
+  if(RaceMode == 0) then
+     control_setEnabled(cbCatagoryFirstToFive, false)
+     control_setEnabled(cbOpenRedDoor, false)
+  else
+      control_setEnabled(cbCatagoryFirstToFive, true)
+      control_setEnabled(cbOpenRedDoor, true)
+  end
+end
+
+--If box checked then Open Red Door
+function cbOpenRedDoorClick()
+  RedDoorOpen = -1 * RedDoorOpen + 1
+end
+
+--If box checked then First To Five Mode Selected
+function cbCatagoryFirstToFiveClick()
+  FirstToFive = -1 * FirstToFive + 1
 end
 
 

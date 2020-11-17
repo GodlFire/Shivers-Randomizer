@@ -1,9 +1,9 @@
-Eagle Head + 688 = ixupi number
+Eagle Head + (Hex)688 = ixupi number
 Room number is EDI = 0000000D, 4*EDI + 2 = (int)54, readInteger(PotMemoryAddress+54)
 
 200 water bottom
 201 wax bottom
-202 ash bottom
+202 ash bottom  CA
 203 oil bottom
 204 cloth bottom
 205 wood bottom
@@ -14,12 +14,12 @@ Room number is EDI = 0000000D, 4*EDI + 2 = (int)54, readInteger(PotMemoryAddress
 
 210 water top
 211 wax top
-212 ash top
+212 ash top  D4
 213 oil top
 214 cloth top
 215 wood top
 216 crystal top
-217 electricity top
+217 electricity top  D9
 218 earth/sand top
 219 metal top
 
@@ -78,3 +78,7 @@ Library Cupboard: EDI = 0000007B
 Eagle Nest: EDI = 00000083
 Tiki Hut: EDI = 00000091
 Electricity Top Tunnel: EDI = 0000007F
+
+Solved States:
+Red Door: Eagle + (Hex)144 Set to 128
+Egypt Door: Eagle + (Hex)145 set to 128

@@ -22,20 +22,37 @@ control_onClick(btnAttach,btnAttachClick)
 btnScramble = createButton(ShiversPotScrambleInterface)
 control_setSize(btnScramble, 80, 20)
 control_setCaption(btnScramble, "Scramble")
-control_setPosition(btnScramble, 10,300)
+control_setPosition(btnScramble, 10,360)
 control_onClick(btnScramble,btnScrambleClick)
 
 --Create Check Boxes
 cbExtraLocations = createCheckBox(ShiversPotScrambleInterface)
 control_setCaption(cbExtraLocations, "Include Eagles Nest,Library Cabinet, and Tiki Hut")
-control_setPosition(cbExtraLocations, 10,215)
+control_setPosition(cbExtraLocations, 30,215)
 control_onClick(cbExtraLocations, cbExtraLocationsClick)
 
 cbExcludeLyre = createCheckBox(ShiversPotScrambleInterface)
 control_setCaption(cbExcludeLyre, "Exclude Lyre")
-control_setPosition(cbExcludeLyre, 10,235)
+control_setPosition(cbExcludeLyre, 30,235)
 control_onClick(cbExcludeLyre, cbExcludeLyreClick)
 control_setEnabled(cbExcludeLyre, false)
+
+cbRaceMode = createCheckBox(ShiversPotScrambleInterface)
+control_setCaption(cbRaceMode, "RaceMode")
+control_setPosition(cbRaceMode, 30,275)
+control_onClick(cbRaceMode, cbRaceModeClick)
+
+cbOpenRedDoor = createCheckBox(ShiversPotScrambleInterface)
+control_setCaption(cbOpenRedDoor, "Red Door Open")
+control_setPosition(cbOpenRedDoor, 30,295)
+control_onClick(cbOpenRedDoor, cbOpenRedDoorClick)
+control_setEnabled(cbOpenRedDoor, false)
+
+cbCatagoryFirstToFive = createCheckBox(ShiversPotScrambleInterface)
+control_setCaption(cbCatagoryFirstToFive, "First to the Only Five")
+control_setPosition(cbCatagoryFirstToFive, 30,315)
+control_onClick(cbCatagoryFirstToFive, cbCatagoryFirstToFiveClick)
+control_setEnabled(cbCatagoryFirstToFive, false)
 
 --Create Text Boxes
 txtboxSeed = createEdit(ShiversPotScrambleInterface)
@@ -60,11 +77,11 @@ control_setPosition(lblSettings, 10,200)
 
 lblScrambleNumber1 = createLabel(ShiversPotScrambleInterface)
 control_setCaption(lblScrambleNumber1, "Scramble Number:")
-control_setPosition(lblScrambleNumber1, 10,320)
+control_setPosition(lblScrambleNumber1, 10,380)
 
 lblScrambleNumber2 = createLabel(ShiversPotScrambleInterface)
 control_setCaption(lblScrambleNumber2, "0")
-control_setPosition(lblScrambleNumber2, 120,320)
+control_setPosition(lblScrambleNumber2, 120,380)
 
 
 ShiversPotScrambleInterface.onClose = function (sender)
